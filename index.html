@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIB Electronic Delivery Systems | South Africa</title>
+    <style>
+        /* Premium Core Styling (Slate Gray & Rose Gold Theme) */
+        :root {
+            --slate-gray: #2c3539;
+            --dark-obsidian: #121212;
+            --rose-gold: #b76e79;
+            --ice-white: #f5f5f7;
+            --muted-gray: #8e8e93;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-obsidian);
+            color: var(--ice-white);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Mandatory Age Gate Overlay */
+        #age-gate {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--dark-obsidian);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .gate-card {
+            background-color: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 450px;
+            width: 100%;
+        }
+
+        .gate-logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 4px;
+            color: var(--ice-white);
+            margin-bottom: 10px;
+        }
+
+        .gate-logo span {
+            color: var(--rose-gold);
+        }
+
+        .gate-card h2 {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            color: var(--muted-gray);
+            font-weight: 400;
+        }
+
+        .gate-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-confirm {
+            background-color: var(--rose-gold);
+            color: white;
+        }
+
+        .btn-confirm:hover {
+            opacity: 0.9;
+        }
+
+        .btn-deny {
+            background-color: transparent;
+            color: var(--muted-gray);
+            border: 1px solid #3a3a3a;
+        }
+
+        .btn-deny:hover {
+            background-color: #222;
+        }
+
+        /* Main Website Layout (Hidden until age verified) */
+        #main-content {
+            display: none;
+            padding: 40px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .brand-logo {
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: 6px;
+            margin-bottom: 5px;
+        }
+
+        .brand-logo span {
+            color: var(--rose-gold);
+        }
+
+        .tagline {
+            color: var(--muted-gray);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Grid Architecture */
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        @media (min-width: 768px) {
+            .product-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .spec-card {
+            background-color: #161617;
+            border-radius: 8px;
+            padding: 30px;
+            border: 1px solid #222;
+        }
+
+        .spec-card h3 {
+            font-size: 1.4rem;
+            color: var(--rose-gold);
+            margin-bottom: 20px;
+            border-bottom: 1px solid #2c2c2e;
+            padding-bottom: 10px;
+        }
+
+        .spec-list dt {
+            font-weight: 600;
+            color: var(--ice-white);
+            margin-top: 15px;
+            font-size: 0.95rem;
+        }
+
+        .spec-list dd {
+            color: var(--muted-gray);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            margin-left: 0;
+        }
+
+        /* Secure Call to Action Buttons */
+        .cta-section {
+            text-align: center;
+            background: linear-gradient(145deg, #1c1c1e, #121212);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid #2c2c2e;
+            margin-bottom: 60px;
+        }
+
+        .cta-section h4 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .cta-section p {
+            color: var(--muted-gray);
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background-color: transparent;
+            color: var(--ice-white);
+            border: 2px solid var(--rose-gold);
+            padding: 15px 35px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            background-color: var(--rose-gold);
+            color: white;
+            box-shadow: 0 0 15px rgba(183, 110, 121, 0.4);
+        }
+
+        /* Mandatory South African Government Warning Label Banner */
+        .gov-warning {
+            background-color: white;
+            color: black;
+            padding: 25px;
+            font-weight: 700;
+            text-align: center;
+            border-radius: 4px;
+            border: 4px solid black;
+            font-size: 1.05rem;
+            line-height: 1.5;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Age Verification Filter -->
+    <div id="age-gate">
+        <div class="gate-card">
+            <div class="gate-logo">PIB<span>//</span></div>
+            <h2>ELECTRONIC DELIVERY SYSTEMS</h2>
+            <p style="font-size: 0.9rem; color: var(--muted-gray); margin-bottom: 25px;">
+                You must be 18 years of age or older to view these hardware specifications in South Africa.
+            </p>
+            <div class="gate-buttons">
+                <button class="btn btn-confirm" onclick="verifyAge()">I am 18+</button>
+                <button class="btn btn-deny" onclick="rejectAge()">Exit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main System Content -->
+    <div id="main-content">
+        <header>
+            <div class="brand-logo">PIB<span>.</span></div>
+            <div class="tagline">Quantum "Ghost" Pro Edition // 8,500 Puffs System</div>
+        </header>
+
+        <div class="product-grid">
+            <!-- Hardware Architecture Specs -->
+            <div class="spec-card">
+                <h3>Hardware Engineering</h3>
+                <dl class="spec-list">
+                    <dt>Chassis Composition</dt>
+                    <dd>Anodized Grade 5 Brushed Titanium shell finished in signature Slate Gray.</dd>
+                    
+                    <dt>Luxury Accent Detailing</dt>
+                    <dd>CNC-machined layout frame joints finished in high-polish Rose Gold coating.</dd>
+                    
+                    <dt>The Touch Sensor Ignition Formula</dt>
+                    <dd>Dual side capacitive touch panels. Airflow draw switches activate strictly upon active finger grip contact, preventing pocket misfires.</dd>
+                </dl>
+            </div>
+
+            <!-- Internal System Configuration Specs -->
+            <div class="spec-card">
+                <h3>Internal Configuration</h3>
+                <dl class="spec-list">
+                    <dt>Modular Hybrid-Pod Execution</dt>
+                    <dd>Eco-friendly reusable core frame housing independent, interchangeable 6.0ml clear PCTG pod cartridges.</dd>
+                    
+                    <dt>Integrated Telemetry Interface</dt>
+                    <dd>Vertical ice-white monochrome Matrix OLED screen reporting live puff metrics and battery fuel levels.</dd>
+                    
+                    <dt>Stealth Mode Programming</dt>
+                    <dd>A rapid triple-tap on the capacitive touch panel entirely deactivates the matrix illumination screen during inhalation.</dd>
+                </dl>
+            </div>
+        </div>
+
+        <!-- B2B Portals Request Section -->
+        <div class="cta-section">
+            <h4>Commercial Distribution Portals</h4>
+            <p>For verified retail accounts, independent tobacconists, and regional franchise buyers looking to log stock applications.</p>
+            <a href="mailto:onboarding@pibvapes.co.za?subject=PIB%20Wholesale%20Account%20Request" class="cta-btn">Request Wholesale Contract</a>
+        </div>
+
+        <!-- Compulsory Regulatory South African Label Area -->
+        <div class="gov-warning">
+            Government Warning: Nicotine is highly addictive. Use of this product can impair judgment. For help to quit contact the national toll-free line on (011) 720 3145.
+        </div>
+    </div>
+
+    <script>
+        // Simple Interaction Script Logic
+        function verifyAge() {
+            document.getElementById('age-gate').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+        }
+
+        function rejectAge() {
+            window.location.href = "https://google.co.za";
+        }
+    </script>
+</body>
+</html>
