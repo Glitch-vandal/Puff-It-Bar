@@ -1,0 +1,26 @@
+
+        <div id="pib-8k" class="product-section">
+            <div class="showcase-grid">
+                <div class="profile-box">
+                    <span class="model-badge">Tier 3: Flagship Luxury System</span>
+                    <h2>Quantum "Ghost" Pro</h2>
+                    <p>The peak of technical hardware execution. Crafted using an anodized Slate Gray Grade 5 Brushed Titanium frame, bordered by mirror-polished Rose Gold accent seams.</p>
+                    
+                    <div class="price-image-container">
+                        <div class="price-data">
+                            <div class="price-tag">R495.00 <span>MSRP</span></div>
+                            <div class="price-tag" style="font-size:1.05rem; color:var(--rose-gold); margin-bottom:0;">R200.00 <span>Wholesale Tier</span></div>
+                        </div>
+                        <div class="product-thumbnail-box">
+                            <img src="IMG_5017.jpeg" alt="PIB Quantum Ghost Pro Visual">
+                        </div>
+                    </div>
+                </div>
+                <div class="spec-box">
+                    <h3>Engineering Specifications</h3>
+                    <dl class="spec-list">
+                        <dt>Secret Formula Touch Activation</dt>
+                        <dd>Dual-side capacitive hand grip conductivity rings. Draw sensors remain inert and locked until fingers break the loop.</dd>
+                        
+                        <dt>Modular Tax Hack</dt>
+                        <dd>Reusable frame housing interchangeable 6.0ml clear magnetic drop pods, cutting upfront SARS port taxes down significantly.</dd>
