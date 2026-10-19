@@ -220,6 +220,7 @@
   <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
+    const dpr = window.devicePixelRatio || 1;
 
     const scoreEl = document.getElementById("score");
     const livesEl = document.getElementById("lives");
@@ -250,7 +251,9 @@
       distance: 0,
       flashTimer: 0,
       traffic: [],
-      lastTime: 0
+      lastTime: 0,
+      viewWidth: window.innerWidth,
+      viewHeight: window.innerHeight
     };
 
     const SETTINGS = {
@@ -262,9 +265,11 @@
     };
 
     function resizeCanvas() {
-      canvas.width = window.innerWidth * window.devicePixelRatio;
-      canvas.height = window.innerHeight * window.devicePixelRatio;
-      ctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
+      game.viewWidth = window.innerWidth;
+      game.viewHeight = window.innerHeight;
+      canvas.width = Math.round(game.viewWidth * dpr);
+      canvas.height = Math.round(game.viewHeight * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
     function clamp(value, min, max) {
@@ -282,6 +287,7 @@
       game.distance = 0;
       game.flashTimer = 0;
       game.traffic = [];
+      game.lastTime = 0;
       updateHud();
       showStart();
     }
@@ -296,6 +302,7 @@
       game.roadCurve = 0;
       game.distance = 0;
       game.traffic = [];
+      game.lastTime = 0;
       startOverlay.style.display = "none";
       updateHud();
     }
@@ -339,22 +346,23 @@
     function bindKeyboard() {
       window.addEventListener("keydown", (e) => {
         const code = e.code;
-        if (code === "ArrowLeft" || code === "KeyA") input.left = true;
-        if (code === "ArrowRight" || code === "KeyD") input.right = true;
-        if (code === "ArrowUp" || code === "KeyW") input.gas = true;
-        if (code === "ArrowDown" || code === "KeyS") input.brake = true;
+        if (["ArrowLeft", "KeyA"].includes(code)) input.left = true;
+        if (["ArrowRight", "KeyD"].includes(code)) input.right = true;
+        if (["ArrowUp", "KeyW"].includes(code)) input.gas = true;
+        if (["ArrowDown", "KeyS"].includes(code)) input.brake = true;
 
         if (code === "Space" && (!game.started || game.over)) {
+          e.preventDefault();
           startGame();
         }
       });
 
       window.addEventListener("keyup", (e) => {
         const code = e.code;
-        if (code === "ArrowLeft" || code === "KeyA") input.left = false;
-        if (code === "ArrowRight" || code === "KeyD") input.right = false;
-        if (code === "ArrowUp" || code === "KeyW") input.gas = false;
-        if (code === "ArrowDown" || code === "KeyS") input.brake = false;
+        if (["ArrowLeft", "KeyA"].includes(code)) input.left = false;
+        if (["ArrowRight", "KeyD"].includes(code)) input.right = false;
+        if (["ArrowUp", "KeyW"].includes(code)) input.gas = false;
+        if (["ArrowDown", "KeyS"].includes(code)) input.brake = false;
       });
     }
 
@@ -446,7 +454,7 @@
 
     function roadCenterAtDepth(z) {
       const curve = Math.sin((game.distance + z * 0.8) * 0.024) * 180;
-      return canvas.width / 2 + curve;
+      return game.viewWidth / 2 + curve;
     }
 
     function roadWidthAtDepth(z) {
@@ -459,40 +467,38 @@
       const roadHalf = roadWidthAtDepth(z) * 0.5;
       const center = roadCenterAtDepth(z);
       const x = center + lane * roadHalf * 0.72;
-      const y = canvas.height * (0.28 + (1 - pct) * 0.72);
+      const y = game.viewHeight * (0.28 + (1 - pct) * 0.72);
       const scale = 0.5 + (1 - pct) * 1.7;
       return { x, y, scale, roadHalf, center };
     }
 
     function drawSky() {
-      const g = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      const g = ctx.createLinearGradient(0, 0, 0, game.viewHeight);
       g.addColorStop(0, "#0f2236");
       g.addColorStop(0.42, "#1f4357");
       g.addColorStop(1, "#264d42");
       ctx.fillStyle = g;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, game.viewWidth, game.viewHeight);
 
-      // Sun / glow
-      const sunX = canvas.width * 0.75;
-      const sunY = canvas.height * 0.18;
+      const sunX = game.viewWidth * 0.75;
+      const sunY = game.viewHeight * 0.18;
       const glow = ctx.createRadialGradient(sunX, sunY, 10, sunX, sunY, 220);
       glow.addColorStop(0, "rgba(255, 203, 92, 0.9)");
       glow.addColorStop(0.5, "rgba(255, 162, 0, 0.35)");
       glow.addColorStop(1, "rgba(255, 162, 0, 0)");
       ctx.fillStyle = glow;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, game.viewWidth, game.viewHeight);
 
-      // distant hills
       ctx.fillStyle = "#1f3d35";
       ctx.beginPath();
-      ctx.moveTo(0, canvas.height * 0.72);
+      ctx.moveTo(0, game.viewHeight * 0.72);
       for (let i = 0; i <= 10; i++) {
-        const x = (canvas.width / 10) * i;
-        const peak = canvas.height * (0.58 + (Math.sin(i * 1.3 + game.distance * 0.02) * 0.06));
+        const x = (game.viewWidth / 10) * i;
+        const peak = game.viewHeight * (0.58 + (Math.sin(i * 1.3 + game.distance * 0.02) * 0.06));
         ctx.lineTo(x, peak);
       }
-      ctx.lineTo(canvas.width, canvas.height);
-      ctx.lineTo(0, canvas.height);
+      ctx.lineTo(game.viewWidth, game.viewHeight);
+      ctx.lineTo(0, game.viewHeight);
       ctx.closePath();
       ctx.fill();
     }
@@ -501,7 +507,6 @@
       const segments = 24;
       const farZ = SETTINGS.worldLength;
 
-      // Road segments
       for (let i = segments - 1; i >= 0; i--) {
         const z0 = (i / segments) * farZ;
         const z1 = ((i + 1) / segments) * farZ;
@@ -523,12 +528,10 @@
         ctx.closePath();
         ctx.fill();
 
-        // shoulder
         ctx.fillStyle = "#b3c7aa";
         ctx.fillRect(left0 - 14, p0.y, 14, p1.y - p0.y);
         ctx.fillRect(right0, p0.y, 14, p1.y - p0.y);
 
-        // road lane lines
         const laneLine = (p0.roadHalf * 2) / 3;
         ctx.strokeStyle = "#f5f7ff";
         ctx.lineWidth = 3;
@@ -573,8 +576,8 @@
     }
 
     function drawPlayerCar() {
-      const x = canvas.width / 2 + game.playerX * 145;
-      const y = canvas.height * 0.86;
+      const x = game.viewWidth / 2 + game.playerX * 145;
+      const y = game.viewHeight * 0.86;
 
       const w = 64;
       const h = 100;
@@ -585,14 +588,11 @@
       const pulse = game.flashTimer > 0 && Math.floor(game.flashTimer * 8) % 2 === 0;
       ctx.fillStyle = pulse ? "#f4f8ff" : "#ff7b00";
 
-      // car body
       ctx.fillRect(-w / 2, -h / 2, w, h);
 
-      // windshield
       ctx.fillStyle = "rgba(255,255,255,0.7)";
       ctx.fillRect(-w * 0.26, -h * 0.18, w * 0.52, h * 0.26);
 
-      // lights
       ctx.fillStyle = "#ffe66d";
       ctx.fillRect(-w * 0.18, -h / 2 + 6, w * 0.18, 6);
       ctx.fillRect(w * 0.03, -h / 2 + 6, w * 0.18, 6);
@@ -601,7 +601,6 @@
       ctx.fillRect(-w * 0.18, h / 2 - 12, w * 0.18, 6);
       ctx.fillRect(w * 0.03, h / 2 - 12, w * 0.18, 6);
 
-      // wheels
       ctx.fillStyle = "#111";
       ctx.fillRect(-w / 2 + 8, -h / 2 + 10, 12, 18);
       ctx.fillRect(w / 2 - 20, -h / 2 + 10, 12, 18);
@@ -615,33 +614,34 @@
       if (!game.started && !game.over) return;
 
       ctx.fillStyle = "rgba(0,0,0,0.20)";
-      ctx.fillRect(16, canvas.height - 64, 220, 42);
+      ctx.fillRect(16, game.viewHeight - 64, 220, 42);
       ctx.fillStyle = "#ffffff";
       ctx.font = "bold 18px Arial";
-      ctx.fillText("Speed: " + Math.floor(game.speed) + " km/h", 28, canvas.height - 35);
+      ctx.fillText("Speed: " + Math.floor(game.speed) + " km/h", 28, game.viewHeight - 35);
     }
 
     function drawGameOver() {
       if (!game.over) return;
 
       ctx.fillStyle = "rgba(0,0,0,0.45)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, game.viewWidth, game.viewHeight);
 
       ctx.fillStyle = "#ff4d6d";
       ctx.textAlign = "center";
       ctx.font = "bold 54px Arial";
-      ctx.fillText("CRASH!", canvas.width / 2, canvas.height / 2 - 30);
+      ctx.fillText("CRASH!", game.viewWidth / 2, game.viewHeight / 2 - 30);
 
       ctx.fillStyle = "#ffffff";
       ctx.font = "bold 28px Arial";
-      ctx.fillText("Score: " + Math.floor(game.score), canvas.width / 2, canvas.height / 2 + 24);
+      ctx.fillText("Score: " + Math.floor(game.score), game.viewWidth / 2, game.viewHeight / 2 + 24);
 
       ctx.font = "20px Arial";
-      ctx.fillText("Tap Start or press SPACE", canvas.width / 2, canvas.height / 2 + 62);
+      ctx.fillText("Tap Start or press SPACE", game.viewWidth / 2, game.viewHeight / 2 + 62);
       ctx.textAlign = "left";
     }
 
     function render() {
+      ctx.clearRect(0, 0, game.viewWidth * dpr, game.viewHeight * dpr);
       drawSky();
       drawRoad();
       drawTrafficCars();
@@ -649,7 +649,6 @@
       drawHudText();
 
       if (!game.started && !game.over) {
-        // subtle motion
       }
 
       drawGameOver();
