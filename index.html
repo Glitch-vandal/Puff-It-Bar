@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a1120" />
     <title>Puff-It-Bar | PIB Electronic Delivery Systems</title>
     <meta
       name="description"
@@ -13,8 +14,11 @@
   <body>
     <header class="topbar">
       <div class="container nav">
-        <div class="brand">PIB</div>
-        <nav>
+        <div class="brand" aria-label="Puff-It-Bar home">
+          <span class="brand-mark">PIB</span>
+          <span class="brand-text">Puff-It-Bar</span>
+        </div>
+        <nav aria-label="Main navigation">
           <a href="#about">About</a>
           <a href="#platforms">Platforms</a>
           <a href="#gallery">Gallery</a>
@@ -28,19 +32,38 @@
         <div class="container hero-grid">
           <div class="hero-copy">
             <span class="eyebrow">Official portal</span>
-            <h1>Puff-It-Bar</h1>
+            <h1>Precision hardware for modern delivery operations.</h1>
             <p>
-              PIB Electronic Delivery Systems builds premium, SARS-compliant modular
-              hardware platforms engineered for secure, reliable performance in the
-              modern delivery landscape.
+              PIB Electronic Delivery Systems designs premium, SARS-compliant modular
+              hardware platforms with titanium-grade durability, secure telemetry,
+              and a compliance-first engineering philosophy built for the next era of
+              reliable service operations.
             </p>
+
+            <div class="stats" aria-label="Key platform metrics">
+              <div>
+                <strong>Grade 5</strong>
+                <span>Titanium chassis</span>
+              </div>
+              <div>
+                <strong>Matrix</strong>
+                <span>Telemetry network</span>
+              </div>
+              <div>
+                <strong>Secure</strong>
+                <span>Operational architecture</span>
+              </div>
+            </div>
+
             <div class="cta-row">
               <a class="button primary" href="#platforms">Explore platforms</a>
               <a class="button secondary" href="#contact">Request a demo</a>
             </div>
           </div>
-          <div class="hero-visual">
-            <img src="IMG_5018.jpeg" alt="Puff-It-Bar hardware" />
+
+          <div class="hero-visual" aria-label="Puff-It-Bar hardware image">
+            <div class="visual-badge">PIB System</div>
+            <img src="IMG_5018.jpeg" alt="Puff-It-Bar hardware platform" />
           </div>
         </div>
       </section>
@@ -48,11 +71,12 @@
       <section id="about" class="section">
         <div class="container narrow">
           <p class="section-label">About PIB</p>
-          <h2>Premium engineering for secure delivery systems.</h2>
+          <h2>Engineered to perform under pressure.</h2>
           <p>
-            Our modular devices integrate durable materials, advanced telemetry, and
-            compliance-first design to help teams move faster without compromising
-            security or safety.
+            Every platform is developed with a focus on structural integrity, secure
+            operation, and operational clarity. From premium enclosure engineering to
+            telemetry-rich system intelligence, PIB creates hardware that supports modern
+            delivery teams without compromise.
           </p>
         </div>
       </section>
@@ -62,16 +86,19 @@
           <p class="section-label">Platform capabilities</p>
           <div class="feature-grid">
             <article class="feature">
+              <div class="feature-icon">01</div>
               <h3>Grade 5 titanium chassis</h3>
-              <p>Lightweight strength, high durability, and long-term operating resilience.</p>
+              <p>High-strength, lightweight architecture built for longevity and resilience.</p>
             </article>
             <article class="feature">
+              <div class="feature-icon">02</div>
               <h3>Matrix telemetry</h3>
-              <p>Real-time system visibility with precise diagnostics and operational feedback.</p>
+              <p>Real-time diagnostics and system awareness for performance visibility.</p>
             </article>
             <article class="feature">
+              <div class="feature-icon">03</div>
               <h3>SARS-compliant build</h3>
-              <p>Compliance-focused hardware architecture designed around secure standards.</p>
+              <p>Compliance-first hardware design supporting secure, dependable operation.</p>
             </article>
           </div>
         </div>
@@ -92,7 +119,11 @@
       <section id="contact" class="section cta-panel">
         <div class="container narrow center">
           <p class="section-label">Contact</p>
-          <h2>Ready to deploy a next-generation delivery platform?</h2>
+          <h2>Build with confidence. Operate with control.</h2>
+          <p>
+            For deployment inquiries, platform details, and premium system consultations,
+            connect with the PIB engineering team.
+          </p>
           <a class="button primary" href="mailto:hello@puff-it-bar.example">hello@puff-it-bar.example</a>
         </div>
       </section>
